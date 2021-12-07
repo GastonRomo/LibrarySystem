@@ -30,7 +30,6 @@
 
     </head>
     <body>
-
         <header>
             <div class="collapse bg-dark" id="navbarHeader">
                 <div class="container">
@@ -64,7 +63,7 @@
             </div>
         </header>
         <main>
-            <section>
+            <section th:if="${autorModificar} == null">
                 <div class="mt-3 py-5 text-center container shadow-lg p-3 mb-5 bg-body rounded">
                     <h2>Tabla de Autores</h2>
                     <div class="table-responsive">
@@ -91,7 +90,7 @@
                                             <a th:href="@{/autor/baja/__${autor.id}__}">
                                                 <button type="button" class="btn btn-danger" >Baja</button>
                                             </a>
-                                            <a>
+                                            <a th:href="@{/autor/modificar/__${autor.id}__}">
                                                 <button type="button" class="btn btn-primary" >Modificar</button>
                                             </a>
 
@@ -103,7 +102,24 @@
                     </div>
                 </div>
             </section>
+            <section th:if="${autorModificar} != null">
+                <div class="container mt-2 text-center shadow-lg p-3 mb-5 bg-body rounded">
+                    <form th:action="@{/autor/modificar}" method="POST">
+                        <h3 th:text="${'Autor a Modificar: '+ autorModificar.nombre}"></h3>
+                        
+                        <input type="hidden" name="id" th:value="${autorModificar.id}">
+                        
+                        <div class="mb-3">
+                            <label for="nombreAutor" class="form-label">Ingrese el nuevo nombre:</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Modificar Autor</button>
+                    </form>
+                </div>
+            </section>
         </main>
+
 
         <footer class="text-muted py-5 ">
             <div class="container">

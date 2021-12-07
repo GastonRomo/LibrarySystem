@@ -41,17 +41,29 @@ public class AutorController {
         }catch(errorServicio e){
 
             modelo.put("error", e.getMessage());
-            modelo.put("nombre",nombre);
-
-            List<Autor> autores = autorRepos.findAll();
-            modelo.put("autores", autores);
-
             return "index.html";
         }
         modelo.put("exito", "El autor fue registrado de manera satisfactoria!");
 
         return "index.html";
     }
+    @GetMapping("/modificar/{id}")
+    public String modificar(ModelMap modelo,@PathVariable String id){
+        Autor a = autorRepos.findById(id).get();
+        modelo.put("autorModificar", a);
+        return "autor.html";
+    }
+    @PostMapping("/modificar")
+    public String modificarAutor(ModelMap modelo,@RequestParam String id,@RequestParam String nombre){
+        try {
+            autorServ.modificarNombre(id, nombre);
+        } catch (errorServicio e) {
+            modelo.put("error", e.getMessage());
+            return "index.html";
+        }
+        return "redirect:/autor/administrar";
+    }
+    
 
     @GetMapping("/baja/{id}")
     public String baja(@PathVariable String id) throws errorServicio{

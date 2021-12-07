@@ -52,16 +52,33 @@ public class PrestamoController {
             prestamoServ.registrar(fechaPrest, fechaDev, idLibro, idCliente);
         } catch (errorServicio e) {
             modelo.put("error", e.getMessage());
-            List <Prestamo> prestamos = prestamoRepositorio.findAll();
-            List <Libro> libros = libroRepositorio.findAll();
-            List <Cliente> clientes = clienteRepositorio.findAll();
-            modelo.put("prestamos", prestamos);
-            modelo.put("libros", libros);
-            modelo.put("clientes", clientes);
             return "index.html"; 
         }
         modelo.put("exito", "El prestamo fue registrado de manera exitosa");
         return "index.html";
+    }
+    @GetMapping("/modificar/{id}")
+    public String modificar(ModelMap modelo,@PathVariable String id){
+        Prestamo p = prestamoRepositorio.findById(id).get();
+        List <Libro> libros = libroRepositorio.findAll();
+        List <Cliente> clientes = clienteRepositorio.findAll();
+        modelo.put("libros", libros);
+        modelo.put("clientes", clientes);
+        modelo.put("prestamoModificar", p);
+        return "prestamo.html";
+    }
+    @PostMapping("/modificar")
+    public String modificarPrestamo(ModelMap modelo,@RequestParam String id,@RequestParam String idLibro,@RequestParam String fechaPrestamo,@RequestParam String fechaDevolucion,@RequestParam String idCliente) throws ParseException{
+        try {
+            SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+            Date fechaPrest = formato.parse(fechaPrestamo);
+            Date fechaDev = formato.parse(fechaDevolucion);
+            prestamoServ.modificar(id,fechaPrest, fechaDev, idLibro, idCliente);
+        } catch (errorServicio e) {
+            modelo.put("error", e.getMessage());
+            return "index.html"; 
+        }
+        return "redirect:/prestamo/administrar";
     }
     @GetMapping("/baja/{id}")
     public String baja(@PathVariable String id) throws errorServicio{

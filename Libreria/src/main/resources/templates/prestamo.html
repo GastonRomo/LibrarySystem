@@ -64,7 +64,7 @@
             </div>
         </header>
         <main>
-            <section>
+            <section th:if="${prestamoModificar}==null">
                 <div class="mt-3 py-5 text-center container shadow-lg p-3 mb-5 bg-body rounded">
                     <h2>Tabla de Prestamos</h2>
                     <div class="table-responsive">
@@ -97,23 +97,46 @@
                                             <a th:href="@{/prestamo/baja/__${prestamo.id}__}">
                                                 <button type="button" class="btn btn-danger" >Baja</button>
                                             </a>
-                                            <a>
+                                            <a th:href="@{/prestamo/modificar/__${prestamo.id}__}">
                                                 <button type="button" class="btn btn-primary" >Modificar</button>
                                             </a>
 
                                         </div>
                                     </td>
                                 </tr>
-
                             </tbody>
                         </table>
                     </div>
-
                 </div>
-
-
             </section>
+            <section th:if="${prestamoModificar}!=null">
+                <div class="container mt-2 text-center shadow-lg p-3 mb-5 bg-body rounded">
+                    <form th:action="@{/prestamo/modificar}" method="POST">
+                        <h4 th:text="${'Prestamo a Modificar: ->Libro: '+ prestamoModificar.libro.titulo + ' ->Cliente: '+ prestamoModificar.cliente.nombre+' '+ prestamoModificar.cliente.apellido}"></h4>
 
+                        <input type="hidden" name="id" th:value="${prestamoModificar.id}">
+                        <label>Seleccione el Libro:</label>
+                        <select name="idLibro" class="form-control">
+                            <option th:each="libro: ${libros}" th:value="${libro.id}" th:text="${libro.titulo}" name="idLibro"></option>
+                        </select>
+                        <div class="mb-3">
+                            <label for="fechaPrestamo" class="form-label">Fecha de Prestamo</label>
+                            <input type="date" class="form-control" id="fechaPrestamo" name="fechaPrestamo">
+                        </div>
+                        <div class="mb-3">
+                            <label for="fechaDevolucion" class="form-label">Fecha de Devolucion</label>
+                            <input type="date" class="form-control" id="fechaDevolucion" name="fechaDevolucion">
+                        </div>
+
+                        <label>Seleccione el Cliente</label>
+                        <select name="idCliente" class="form-control">
+                            <option th:each="cliente: ${clientes}" th:value="${cliente.id}" th:text="${cliente.nombre+' '+cliente.apellido }" name="idCliente"></option>
+                        </select>
+
+                        <button type="submit" class="btn btn-primary mt-2">Registrar Prestamo</button>
+                    </form>
+                </div>
+            </section>
 
 
         </main>

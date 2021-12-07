@@ -45,11 +45,11 @@ public class LibroServicio {
         
     }
     @Transactional
-    public void modificar(MultipartFile archivo,String id,long isbn,String titulo,Integer anio,Integer ejemplares,Integer ejemPrestados,String nombreAutor, String nombreEditorial) throws errorServicio{
+    public void modificar(MultipartFile archivo,String id,long isbn,String titulo,Integer anio,Integer ejemplares,Integer ejemPrestados,String idAutor, String idEditorial) throws errorServicio{
         validar(archivo,isbn, titulo, anio, ejemplares, ejemPrestados);
         Optional<Libro> respuesta = libroRepositorio.findById(id);
         if(respuesta.isPresent()){
-            Libro l = new Libro();
+            Libro l = respuesta.get();
             l.setIsbn(isbn);
             l.setTitulo(titulo);
             l.setAnio(anio);
@@ -57,8 +57,8 @@ public class LibroServicio {
             l.setEjemPrestados(ejemPrestados);
             l.setEjemRestantes();
             l.setAlta(true);
-            l.setAutor(autorRepositorio.buscarAutorPorNombre(nombreAutor));
-            l.setEditorial(editorialRepositorio.buscarEditorialPorNombre(nombreEditorial));
+            l.setAutor(autorRepositorio.findById(idAutor).get());
+            l.setEditorial(editorialRepositorio.findById(idEditorial).get());
             String idFoto = null;
             if(l.getFoto() != null){
                 idFoto = l.getFoto().getId();

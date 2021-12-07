@@ -52,6 +52,24 @@ public class EditorialController {
             return "redirect:/";
         }
     }
+    @GetMapping("/modificar/{id}")
+    public String modificar(ModelMap modelo,@PathVariable String id){
+        Editorial e = editorialRep.findById(id).get();
+        modelo.put("editorialModificar", e);
+        return "editorial.html";
+    }
+    @PostMapping("/modificar")
+    public String modificarEditorial(ModelMap modelo,@RequestParam String id,@RequestParam String nombre){
+        try {
+            editorialServ.modificar(id, nombre);
+            
+        } catch (errorServicio e) {
+            modelo.put("error", e.getMessage());
+            return "index.html";    
+        }
+        return "redirect:/editorial/administrar";
+        
+    }
     @GetMapping("/alta/{id}")
     public String alta(@PathVariable String id) throws errorServicio{
         try{

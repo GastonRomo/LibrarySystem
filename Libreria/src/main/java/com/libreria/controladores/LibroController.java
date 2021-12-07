@@ -52,20 +52,6 @@ public class LibroController {
 
         }catch(errorServicio e){
             modelo.put("error", e.getMessage());
-            modelo.put("isbn",isbn);
-            modelo.put("titulo",titulo);
-            modelo.put("anio",anio);
-            modelo.put("ejemplares",ejemplares);
-            modelo.put("ejemPrestados",ejemPrestados);
-
-            List <Autor> autores = autorRepositorio.findAll();
-            List <Editorial> editoriales = editorialRepositorio.findAll();
-            List <Libro> libros = libroRep.findAll();
-
-            modelo.put("autores", autores);
-            modelo.put("editoriales", editoriales);
-            modelo.put("libros", libros);
-
             return "index.html";
         }
         modelo.put("exito", "El libro fue registrado de manera satisfactoria!");
@@ -79,6 +65,28 @@ public class LibroController {
         }catch(errorServicio e){
             return "redirect:/";
         }
+    }
+    @GetMapping("/modificar/{id}")
+    public String modificar(ModelMap modelo,@PathVariable String id){
+        Libro l = libroRep.findById(id).get();
+        List <Autor> autores = autorRepositorio.findAll();
+        List <Editorial> editoriales = editorialRepositorio.findAll();
+
+        modelo.put("autores", autores);
+        modelo.put("editoriales", editoriales);
+        modelo.put("libroModificar", l);
+        return "libro.html";
+    }
+    @PostMapping("/modificar")
+    public String modificarLibro(ModelMap modelo,@RequestParam String id,@RequestParam MultipartFile archivo,@RequestParam long isbn,@RequestParam String titulo,@RequestParam Integer anio,@RequestParam Integer ejemplares,@RequestParam Integer ejemPrestados,@RequestParam String idAutor,@RequestParam String idEditorial){
+        try{
+            libroServ.modificar(archivo,id,isbn, titulo, anio, ejemplares, ejemPrestados, idAutor, idEditorial);
+
+        }catch(errorServicio e){
+            modelo.put("error", e.getMessage());
+            return "index.html";
+        }
+        return "redirect:/libro/administrar";
     }
     @GetMapping("/alta/{id}")
     public String alta(@PathVariable String id) throws errorServicio{

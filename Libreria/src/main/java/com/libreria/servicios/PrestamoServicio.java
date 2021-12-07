@@ -29,6 +29,9 @@ public class PrestamoServicio {
     public void registrar(Date fechaPrestamo,Date fechaDevolucion,String idLibro,String idCliente) throws errorServicio{
         Cliente c = clienteRep.findById(idCliente).get();
         Libro l = libroRep.findById(idLibro).get();
+        if(l.getEjemRestantes() == 0 ){
+            throw new errorServicio("No quedan mas ejemplares del libro "+l.getTitulo());
+        }
         validar(c,l,fechaPrestamo, fechaDevolucion);
         
         Prestamo p = new Prestamo();
@@ -89,9 +92,7 @@ public class PrestamoServicio {
         if(fechaDev.compareTo(fechaPres) < 0 ){
             throw new errorServicio("Error la fecha de devolucion no puede ser menor a la fecha del prestamo");
         }
-        if(l.getEjemRestantes() == 0 ){
-            throw new errorServicio("No quedan mas ejemplares del libro "+l.getTitulo());
-        }
+        
         List<Prestamo> prestamos = prestamoRep.buscarPorDocumentoCliente(c.getDocumento());
         for (Prestamo prestamo : prestamos) {
             //si hay un prestamo de los prestamos que realizo el Cliente c que coincida con el libro que quiere adquirir

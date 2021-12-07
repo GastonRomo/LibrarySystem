@@ -43,6 +43,22 @@ public class ClienteController {
         modelo.put("exito", "El cliente fue registrado de manera exitosa");
         return "index.html";
     }
+    @GetMapping("/modificar/{id}")
+    public String modificar(ModelMap modelo,@PathVariable String id){
+        Cliente c = clienteRepo.findById(id).get();
+        modelo.put("clienteModificar", c);
+        return "cliente.html";
+    }
+    @PostMapping("/modificar")
+    public String modificarCliente(ModelMap modelo,@RequestParam String id,@RequestParam long documento,@RequestParam String nombre,@RequestParam String apellido,@RequestParam String telefono){
+        try {
+            clienteServ.modificar(id, documento, nombre, apellido, telefono);
+        } catch (errorServicio e) {
+            modelo.put("error", e.getMessage());
+            return "index.html";
+        }
+        return "redirect:/cliente/administrar";
+    }
     @GetMapping("/baja/{id}")
     public String baja(@PathVariable String id) throws errorServicio{
         try{

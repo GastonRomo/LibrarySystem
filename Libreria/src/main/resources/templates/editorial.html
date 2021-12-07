@@ -64,7 +64,7 @@
             </div>
         </header>
         <main>
-            <section>
+            <section th:if="${editorialModificar} == null">
                 <div class="mt-3 py-5 text-center container shadow-lg p-3 mb-5 bg-body rounded">
                     <h2>Tabla de Editoriales</h2>
                     <div class="table-responsive">
@@ -91,7 +91,7 @@
                                             <a th:href="@{/editorial/baja/__${editorial.id}__}">
                                                 <button type="button" class="btn btn-danger" >Baja</button>
                                             </a>
-                                            <a>
+                                            <a th:href="@{/editorial/modificar/__${editorial.id}__}">
                                                 <button type="button" class="btn btn-primary" >Modificar</button>
                                             </a>
 
@@ -106,6 +106,20 @@
                 </div>
 
 
+            </section>
+            <section th:if="${editorialModificar}!=null">
+                <div class="container mt-2 text-center shadow-lg p-3 mb-5 bg-body rounded">
+                    <form th:action="@{/editorial/modificar}" method="POST">
+                        <h4 th:text="${'Editorial a Modificar: '+ editorialModificar.nombre}"></h4>
+                        
+                        <input type="hidden" name="id" th:value="${editorialModificar.id}">
+                        <div class="mb-3">
+                            <label for="nombreEditorial" class="form-label">Ingrese el nuevo nombre:</label>
+                            <input type="text" class="form-control" id="nombreEditorial" name="nombre">
+                        
+                        <button type="submit" class="btn btn-primary">Modificar Editorial</button>
+                    </form>
+                </div>
             </section>
 
 
