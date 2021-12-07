@@ -1,2 +1,4 @@
 # LibrarySystem
-Proyecto de gestion de Libros para una Libreria realizado con Java 8, Springboot, Thymeleaf, Maven, Hibernate, Mysql, HTML 5, CSS 3, Bootstrap 5.
+Proyecto de una pagina web para la administracion de libros,autores,editoriales,clientes y prestamos de los libros.
+
+Permite dar de alta/baja los mismos,registrarlos y modificarlos persistiendo la informacion en una base de datos.
